@@ -11,7 +11,7 @@ public class ImportSkeleton extends SkeletonMember implements Comparable<ImportS
 	}
 	
 	public ImportSkeleton(Class<?> klass) {
-		super(klass.getCanonicalName());
+		super(klass == null ? "" : klass.getCanonicalName());
 	}
 	
 	
@@ -21,9 +21,7 @@ public class ImportSkeleton extends SkeletonMember implements Comparable<ImportS
 		if(object == this) return true;
 		if(object.getClass() != getClass()) return false;
 		ImportSkeleton other = (ImportSkeleton) object;
-		return new EqualsBuilder()
-						.append(getName(), other.getName())
-						.isEquals();
+		return new EqualsBuilder().append(getName(), other.getName()).isEquals();
 	}
 	
 	@Override
