@@ -3,17 +3,36 @@ package org.jpgohlke.generation.code.java.skeleton;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class VariableSkeleton extends SkeletonMember implements Comparable<VariableSkeleton> {
+public class VariableSkeleton<T> extends SkeletonMember implements Comparable<VariableSkeleton<?>> {
 	
-	private Class<?> type;
+	private final Class<T> type;
+	private T value;
 	
 	
-	public VariableSkeleton(Class<?> type, String name) {
+	public VariableSkeleton(Class<T> type, String name) {
+		this(type, name, null);
+	}
+	
+	public VariableSkeleton(Class<T> type, String name, T value) {
 		super(name);
 		if(type == null) {
 			throw new IllegalArgumentException("A variable must have a type.");
 		}
 		this.type = type;
+		this.value = value;
+	}
+	
+	
+	public Class<T> getType() {
+		return type;
+	}
+	
+	public T getValue() {
+		return value;
+	}
+	
+	public void setValue(T value) {
+		this.value = value;
 	}
 	
 	
@@ -22,7 +41,7 @@ public class VariableSkeleton extends SkeletonMember implements Comparable<Varia
 		if(object == null) return false;
 		if(object == this) return true;
 		if(object.getClass() != getClass()) return false;
-		VariableSkeleton other = (VariableSkeleton) object;
+		VariableSkeleton<?> other = (VariableSkeleton<?>) object;
 		return new EqualsBuilder().append(getName(), other.getName()).isEquals();
 	}
 	
@@ -33,11 +52,15 @@ public class VariableSkeleton extends SkeletonMember implements Comparable<Varia
 	
 	@Override
 	public String toString() {
-		return type.getSimpleName() + " " + getName();
+		String string = type.getSimpleName() + " " + getName();
+		if(value != null) {
+			string += " = " + value;
+		}
+		return string;
 	}
 
 	@Override
-	public int compareTo(VariableSkeleton other) {
+	public int compareTo(VariableSkeleton<?> other) {
 		return getName().compareTo(other.getName());
 	}
 
