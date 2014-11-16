@@ -79,7 +79,6 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 		return signature;
 	}
 
-
 	@Override
 	public int compareTo(MethodSkeleton other) {
 		
