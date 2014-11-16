@@ -3,7 +3,7 @@ package org.jpgohlke.generation.code.java.skeleton;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class VariableSkeleton extends SkeletonMember {
+public class VariableSkeleton extends SkeletonMember implements Comparable<VariableSkeleton> {
 	
 	private Class<?> type;
 	
@@ -31,10 +31,14 @@ public class VariableSkeleton extends SkeletonMember {
 		return new HashCodeBuilder().append(getName()).toHashCode();
 	}
 	
-	
 	@Override
 	public String toString() {
 		return type.getSimpleName() + " " + getName();
+	}
+
+	@Override
+	public int compareTo(VariableSkeleton other) {
+		return getName().compareTo(other.getName());
 	}
 
 }

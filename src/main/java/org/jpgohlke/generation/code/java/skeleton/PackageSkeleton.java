@@ -3,7 +3,7 @@ package org.jpgohlke.generation.code.java.skeleton;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class PackageSkeleton extends SkeletonMember {
+public class PackageSkeleton extends SkeletonMember implements Comparable<PackageSkeleton> {
 	
 	
 	public PackageSkeleton(String name) {
@@ -28,6 +28,11 @@ public class PackageSkeleton extends SkeletonMember {
 	@Override
 	public String toString() {
 		return getName() == null ? "" : "package " + getName() + ";";
+	}
+	
+	@Override
+	public int compareTo(PackageSkeleton other) {
+		return getName().compareTo(other.getName());
 	}
 	
 	

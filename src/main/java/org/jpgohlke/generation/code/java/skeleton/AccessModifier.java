@@ -11,6 +11,7 @@ public enum AccessModifier {
 		return this == PACKAGE ? "" : name().toLowerCase();
 	}
 	
+	
 	public static AccessModifier fromModifier(int modifier) {
 		switch(modifier) {
 		case Modifier.PUBLIC:

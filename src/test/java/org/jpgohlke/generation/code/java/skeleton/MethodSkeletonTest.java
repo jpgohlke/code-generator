@@ -137,17 +137,5 @@ public class MethodSkeletonTest {
 		other.setArguments(Collections.<VariableSkeleton>emptyList());
 		assertEquals(-2, method.compareTo(other));
 	}
-	
-	/*
-	 	
-		
-		int accessOrder = accessModifier.compareTo(other.accessModifier);
-		if(accessOrder != 0) return accessOrder;
-		
-		int nameOrder = name.compareTo(other.name);
-		if(nameOrder != 0) return nameOrder;
-		
-		return other.arguments.size() - arguments.size();
-	 */
 
 }

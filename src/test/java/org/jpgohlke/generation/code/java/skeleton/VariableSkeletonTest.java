@@ -50,5 +50,15 @@ public class VariableSkeletonTest {
 	public void testToString_Primitive() {
 		assertEquals("int asd", variable.toString());
 	}
+	
+	@Test
+	public void testCompareTo_SameName() {
+		assertEquals(0, variable.compareTo(new VariableSkeleton(int.class, "asd")));
+	}
+	
+	@Test
+	public void testCompareTo_DifferentName() {
+		assertEquals(-10, variable.compareTo(new VariableSkeleton(int.class, "kappa")));
+	}
 
 }

@@ -61,5 +61,17 @@ public class PackageSkeletonTest {
 		PackageSkeleton other = new PackageSkeleton("java.math");
 		assertTrue(skeleton.equals(other));
 	}
+	
+	@Test
+	public void testCompareTo_SameName() {
+		PackageSkeleton other = new PackageSkeleton("java.math");
+		assertEquals(0, skeleton.compareTo(other));
+	}
+	
+	@Test
+	public void testCompareTo_DifferentName() {
+		PackageSkeleton other = new PackageSkeleton("sdfsd");
+		assertEquals(-9, skeleton.compareTo(other));
+	}
 
 }
