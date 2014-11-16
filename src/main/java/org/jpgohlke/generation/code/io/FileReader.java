@@ -21,8 +21,9 @@ public class FileReader extends FileProcessor {
 	public String read() throws FileNotFoundException {
 		try(Scanner scanner = new Scanner(file)) {
 			String result = "";
-			while(scanner.hasNext()) {
-				result += scanner.next();
+			while(scanner.hasNextLine()) {
+				result += scanner.nextLine();
+				result += "\n";
 			}
 			return result;
 		}

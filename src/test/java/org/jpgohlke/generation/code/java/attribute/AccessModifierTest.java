@@ -1,6 +1,6 @@
-package org.jpgohlke.generation.code.java.skeleton;
+package org.jpgohlke.generation.code.java.attribute;
 
-import static org.jpgohlke.generation.code.java.skeleton.AccessModifier.*;
+import static org.jpgohlke.generation.code.java.attribute.AccessModifier.*;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Modifier;

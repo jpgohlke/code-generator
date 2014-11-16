@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 import org.junit.Before;
 import org.junit.Test;
 
