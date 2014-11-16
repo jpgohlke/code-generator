@@ -60,5 +60,25 @@ public class ImportSkeletonTest {
 		ImportSkeleton other = new ImportSkeleton(BigDecimal.class);
 		assertTrue(skeleton.equals(other));
 	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testCompareTo_Null() {
+		skeleton.compareTo(null);
+	}
+	
+	@Test
+	public void testCompareTo_Equals() {
+		assertEquals(0, skeleton.compareTo(new ImportSkeleton(BigDecimal.class)));
+	}
+	
+	@Test
+	public void testCompareTo_LessThan() {
+		assertTrue(new ImportSkeleton(Connection.class).compareTo(skeleton) > 0);
+	}
+	
+	@Test
+	public void testCompareTo_GreaterThan() {
+		assertTrue(skeleton.compareTo(new ImportSkeleton(Connection.class)) < 0);
+	}
 
 }

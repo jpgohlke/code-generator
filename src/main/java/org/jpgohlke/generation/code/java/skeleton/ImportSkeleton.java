@@ -3,7 +3,7 @@ package org.jpgohlke.generation.code.java.skeleton;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class ImportSkeleton extends SkeletonMember {
+public class ImportSkeleton extends SkeletonMember implements Comparable<ImportSkeleton> {
 	
 	
 	public ImportSkeleton(String name) {
@@ -22,18 +22,23 @@ public class ImportSkeleton extends SkeletonMember {
 		if(object.getClass() != getClass()) return false;
 		ImportSkeleton other = (ImportSkeleton) object;
 		return new EqualsBuilder()
-						.append(name, other.name)
+						.append(getName(), other.getName())
 						.isEquals();
 	}
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(name).toHashCode();
+		return new HashCodeBuilder().append(getName()).toHashCode();
 	}
 	
 	@Override
 	public String toString() {
-		return "import " + name + ";";
+		return "import " + getName() + ";";
+	}
+	
+	@Override
+	public int compareTo(ImportSkeleton member) {
+		return getName().compareTo(member.getName());
 	}
 
 }

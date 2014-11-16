@@ -17,17 +17,17 @@ public class PackageSkeleton extends SkeletonMember {
 		if(object == this) return true;
 		if(object.getClass() != getClass()) return false;
 		PackageSkeleton other = (PackageSkeleton) object;
-		return new EqualsBuilder().append(name, other.name).isEquals();
+		return new EqualsBuilder().append(getName(), other.getName()).isEquals();
 	}
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(name).toHashCode();
+		return new HashCodeBuilder().append(getName()).toHashCode();
 	}
 	
 	@Override
 	public String toString() {
-		return name == null ? "" : "package " + name + ";";
+		return getName() == null ? "" : "package " + getName() + ";";
 	}
 	
 	

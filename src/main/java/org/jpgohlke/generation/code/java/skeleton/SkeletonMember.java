@@ -4,8 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public abstract class SkeletonMember {
 	
-	protected String name;
-	protected AccessModifier accessModifier;
+	private static final AccessModifier DEFAULT_ACCESS_MODIFIER = AccessModifier.PUBLIC;
+	
+	private String name;
+	private AccessModifier accessModifier;
 	protected boolean isStatic;
 	
 	
@@ -14,6 +16,7 @@ public abstract class SkeletonMember {
 			throw new IllegalArgumentException("Each member of the skeleton must have a name.");
 		}
 		this.name = name;
+		this.accessModifier = DEFAULT_ACCESS_MODIFIER;
 	}
 	
 	
@@ -22,7 +25,21 @@ public abstract class SkeletonMember {
 	}
 	
 	public void setName(String name) {
+		if(StringUtils.isBlank(name)) {
+			throw new IllegalArgumentException("Each member of the skeleton must have a name.");
+		}
 		this.name = name;
+	}
+	
+	public AccessModifier getAccessModifier() {
+		return accessModifier;
+	}
+	
+	public void setAccessModifier(AccessModifier accessModifier) {
+		if(accessModifier == null) {
+			throw new IllegalArgumentException("Each member of the skeleton must have an access modifier.");
+		}
+		this.accessModifier = accessModifier;
 	}
 
 }

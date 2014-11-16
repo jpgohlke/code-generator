@@ -52,14 +52,14 @@ public class ClassSkeleton extends SkeletonMember {
 		if(object.getClass() != getClass()) return false;
 		ClassSkeleton other = (ClassSkeleton) object;
 		return new EqualsBuilder()
-						.append(name, other.name)
+						.append(getName(), other.getName())
 						.append(packageDeclaration, other.packageDeclaration)
 						.isEquals();
 	}
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(name).append(packageDeclaration).toHashCode();
+		return new HashCodeBuilder().append(getName()).append(packageDeclaration).toHashCode();
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public class ClassSkeleton extends SkeletonMember {
 		String string = "";
 		
 		// Package
-		if(packageDeclaration != null && isNotBlank(name)) {
+		if(packageDeclaration != null && isNotBlank(getName())) {
 			string += packageDeclaration;
 			string += newLines(2);
 		}
@@ -84,12 +84,12 @@ public class ClassSkeleton extends SkeletonMember {
 		
 		// Declaration
 		String declaration = "";
-		if(accessModifier != AccessModifier.PACKAGE) {
-			declaration += accessModifier + " ";
+		if(getAccessModifier() != AccessModifier.PACKAGE) {
+			declaration += getAccessModifier() + " ";
 		}
 		declaration += isStatic ? "static " : "";
 		declaration += isEnum ? "enum" : "class";
-		declaration += name;
+		declaration += getName();
 		string += declaration + " {";
 		string += indent(newLines(2));
 		
