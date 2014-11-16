@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public class ClassSkeleton extends SkeletonMember {
 	

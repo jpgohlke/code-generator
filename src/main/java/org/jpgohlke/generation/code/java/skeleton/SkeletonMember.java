@@ -1,6 +1,9 @@
 package org.jpgohlke.generation.code.java.skeleton;
 
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
+import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public abstract class SkeletonMember {
 	
@@ -9,6 +12,7 @@ public abstract class SkeletonMember {
 	private String name;
 	private AccessModifier accessModifier;
 	protected boolean isStatic;
+	private Set<AnnotationSkeleton> annotations;  //TODO
 	
 	
 	public SkeletonMember(String name) {

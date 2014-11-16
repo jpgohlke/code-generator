@@ -12,7 +12,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class MethodSkeleton extends SkeletonMember implements Comparable<MethodSkeleton> {
 	
-	private boolean override;
+	private boolean override; //TODO remove
+	private boolean isSynchronized; //TODO
 	private List<VariableSkeleton> arguments;
 	
 	
