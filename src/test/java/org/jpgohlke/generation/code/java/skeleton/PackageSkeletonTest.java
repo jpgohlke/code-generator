@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 
+import org.jpgohlke.generation.code.java.skeleton.PackageSkeleton;
 import org.junit.Before;
 import org.junit.Test;
 

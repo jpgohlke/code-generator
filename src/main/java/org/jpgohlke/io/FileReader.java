@@ -1,4 +1,4 @@
-package org.jpgohlke.generation.code.io;
+package org.jpgohlke.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;

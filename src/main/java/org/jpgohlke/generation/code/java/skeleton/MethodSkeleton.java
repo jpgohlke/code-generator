@@ -3,40 +3,41 @@ package org.jpgohlke.generation.code.java.skeleton;
 import static org.jpgohlke.generation.code.format.CodeFormatter.indent;
 import static org.jpgohlke.generation.code.format.CodeFormatter.newLines;
 import static org.apache.commons.lang3.StringUtils.join;
+import static org.apache.commons.lang3.StringUtils.chop;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class MethodSkeleton extends SkeletonMember implements Comparable<MethodSkeleton> {
 	
-	private boolean override; //TODO remove
 	private boolean isSynchronized; //TODO
-	private List<VariableSkeleton> arguments;
+	private List<VariableSkeleton<?>> arguments;
 	
 	
 	public MethodSkeleton(String name) {
 		super(name);
-		arguments = new ArrayList<VariableSkeleton>();
+		arguments = new ArrayList<VariableSkeleton<?>>();
 	}
 	
 	
-	public void setOverride(boolean override) {
-		this.override = override;
-	}
 	
-	public boolean isOverride() {
-		return override;
-	}
-	
-	public void setArguments(List<VariableSkeleton> arguments) {
+	public void setArguments(List<VariableSkeleton<?>> arguments) {
 		this.arguments = arguments;
 	}
 	
-	public List<VariableSkeleton> getArguments() {
+	public List<VariableSkeleton<?>> getArguments() {
 		return arguments;
+	}
+	
+	public void setSynchronized(boolean isSynchronized) {
+		this.isSynchronized = isSynchronized;
+	}
+	
+	public boolean isSynchronized() {
+		return isSynchronized;
 	}
 	
 	
@@ -48,7 +49,7 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 		
 		MethodSkeleton other = (MethodSkeleton) object;
 		
-		if(isStatic != other.isStatic) return false;
+		if(isStatic() != other.isStatic()) return false;
 		if(getName() != other.getName()) return false;
 		
 		if(arguments == null && other.arguments == null) return true;
@@ -67,10 +68,14 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 	@Override
 	public String toString() {
 		String signature = "";
-		signature += override ? "@Override" : "";
+		if(isNotEmpty(getAnnotations())) {
+			signature = join(getAnnotations(), newLines(1));
+		}
+		signature = chop(signature);
+		
 		//TODO: access modifiers, etc.
 		signature += getName() + "(";
-		if(CollectionUtils.isNotEmpty(arguments)) {
+		if(isNotEmpty(arguments)) {
 			join(arguments.iterator(), ", ");
 			signature = signature.substring(0, signature.length() - 2);
 		}
@@ -83,11 +88,14 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 	@Override
 	public int compareTo(MethodSkeleton other) {
 		
-		if(isStatic && !other.isStatic) return 1;
-		if(!isStatic && other.isStatic) return -1;
+		if(isStatic() && !other.isStatic()) return 1;
+		if(!isStatic() && other.isStatic()) return -1;
 		
-		if(override && !other.override) return 1;
-		if(!override && other.override) return -1;
+		boolean override = getAnnotations().contains(AnnotationSkeleton.OVERRIDE);
+		boolean otherOverride = other.getAnnotations().contains(AnnotationSkeleton.OVERRIDE);
+		
+		if(override && !otherOverride) return 1;
+		if(!override && otherOverride) return -1;
 		
 		int accessOrder = getAccessModifier().compareTo(other.getAccessModifier());
 		if(accessOrder != 0) return accessOrder;

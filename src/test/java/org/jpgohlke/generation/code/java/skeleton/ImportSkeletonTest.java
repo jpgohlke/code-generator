@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.math.BigDecimal;
 import java.sql.Connection;
 
+import org.jpgohlke.generation.code.java.skeleton.ImportSkeleton;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class ImportSkeletonTest {
 	}
 	
 	
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testConstructor_NullClass() {
 		new ImportSkeleton((Class<?>) null);
 	}

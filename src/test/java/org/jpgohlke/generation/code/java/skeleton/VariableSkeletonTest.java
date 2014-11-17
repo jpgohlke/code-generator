@@ -2,6 +2,8 @@ package org.jpgohlke.generation.code.java.skeleton;
 
 import static org.junit.Assert.*;
 
+import org.jpgohlke.generation.code.java.attribute.AccessModifier;
+import org.jpgohlke.generation.code.java.skeleton.VariableSkeleton;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,6 +57,13 @@ public class VariableSkeletonTest {
 	public void testToString_Value() {
 		variable.setValue(3);
 		assertEquals("int asd = 3", variable.toString());
+	}
+	
+	@Test
+	public void testToString_WithAccessModifier() {
+		variable.setValue(3);
+		variable.setAccessModifier(AccessModifier.PUBLIC);
+		assertEquals("public int asd = 3", variable.toString());
 	}
 	
 	@Test

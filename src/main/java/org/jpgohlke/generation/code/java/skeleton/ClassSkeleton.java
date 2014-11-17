@@ -19,9 +19,8 @@ public class ClassSkeleton extends SkeletonMember {
 	private PackageSkeleton packageDeclaration;
 	private Set<ImportSkeleton> imports;
 	private Set<ClassSkeleton> innerClasses;
-	private Set<VariableSkeleton> fields;
+	private Set<VariableSkeleton<?>> fields;
 	private Set<MethodSkeleton> methods;
-	
 	
 	
 	public ClassSkeleton(String name) {
@@ -88,7 +87,7 @@ public class ClassSkeleton extends SkeletonMember {
 		if(getAccessModifier() != AccessModifier.PACKAGE) {
 			declaration += getAccessModifier() + " ";
 		}
-		declaration += isStatic ? "static " : "";
+		declaration += isStatic() ? "static " : "";
 		declaration += isEnum ? "enum" : "class";
 		declaration += getName();
 		string += declaration + " {";
@@ -96,20 +95,20 @@ public class ClassSkeleton extends SkeletonMember {
 		
 		// Inner Classes
 		if(isNotEmpty(innerClasses)) {
-			string += indent(join(innerClasses, "\n\n"));
+			string += indent(join(innerClasses, newLines(2)));
 			string += indent(newLines(3));
 		}
 		
 		// Fields
 		if(isNotEmpty(fields)) {
-			string += indent(join(fields, ";\n"));
+			string += indent(join(fields, ";" + newLines(1)));
 			string += ";";
 			string += indent(newLines(2));
 		}
 		
 		// Methods
 		if(isNotEmpty(methods)) {
-			string += indent(join(methods, "\n\n"));
+			string += indent(join(methods, newLines(2)));
 			string += indent(newLines(2));
 		}
 		

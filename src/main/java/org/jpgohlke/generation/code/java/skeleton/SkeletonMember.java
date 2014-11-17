@@ -1,5 +1,6 @@
 package org.jpgohlke.generation.code.java.skeleton;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,12 +8,12 @@ import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public abstract class SkeletonMember {
 	
-	private static final AccessModifier DEFAULT_ACCESS_MODIFIER = AccessModifier.PUBLIC;
+	private static final AccessModifier DEFAULT_ACCESS_MODIFIER = AccessModifier.PACKAGE;
 	
 	private String name;
 	private AccessModifier accessModifier;
-	protected boolean isStatic;
-	private Set<AnnotationSkeleton> annotations;  //TODO
+	private boolean isStatic;
+	private Set<AnnotationSkeleton> annotations;
 	
 	
 	public SkeletonMember(String name) {
@@ -21,6 +22,7 @@ public abstract class SkeletonMember {
 		}
 		this.name = name;
 		this.accessModifier = DEFAULT_ACCESS_MODIFIER;
+		this.annotations = new HashSet<AnnotationSkeleton>();
 	}
 	
 	
@@ -44,6 +46,22 @@ public abstract class SkeletonMember {
 			throw new IllegalArgumentException("Each member of the skeleton must have an access modifier.");
 		}
 		this.accessModifier = accessModifier;
+	}
+	
+	public boolean isStatic() {
+		return isStatic;
+	}
+	
+	public void setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
+	}
+	
+	public Set<AnnotationSkeleton> getAnnotations() {
+		return annotations;
+	}
+	
+	public void addAnnotation(AnnotationSkeleton annotation) {
+		annotations.add(annotation);
 	}
 
 }

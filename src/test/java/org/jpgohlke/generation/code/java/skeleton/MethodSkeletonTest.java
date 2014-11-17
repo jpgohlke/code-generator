@@ -7,15 +7,17 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jpgohlke.generation.code.java.attribute.AccessModifier;
+import org.jpgohlke.generation.code.java.skeleton.MethodSkeleton;
+import org.jpgohlke.generation.code.java.skeleton.VariableSkeleton;
 import org.junit.Before;
 import org.junit.Test;
 
 public class MethodSkeletonTest {
 	
 	private static final String METHOD_NAME = "toString";
-	private static final List<VariableSkeleton> ARGUMENTS = Arrays.asList(
-			new VariableSkeleton(List.class, "rawr"),
-			new VariableSkeleton(Arrays.class, "doom")
+	private static final List<VariableSkeleton<?>> ARGUMENTS = Arrays.<VariableSkeleton<?>>asList(
+			new VariableSkeleton<String>(String.class, "asdf"),
+			new VariableSkeleton<Integer>(Integer.class, "doom")
 		);
 	
 	private MethodSkeleton method;
@@ -25,11 +27,10 @@ public class MethodSkeletonTest {
 	@Before
 	public void setup() {
 		method = new MethodSkeleton(METHOD_NAME);
-		method.isStatic = false;
+		method.setStatic(false);
 		method.setArguments(ARGUMENTS);
-		
 		other = new MethodSkeleton(METHOD_NAME);
-		other.isStatic = false;
+		other.setStatic(false);
 		other.setArguments(ARGUMENTS);
 	}
 	
@@ -51,7 +52,7 @@ public class MethodSkeletonTest {
 	
 	@Test
 	public void testEquals_Static() {
-		other.isStatic = true;
+		other.setStatic(true);
 		assertFalse(method.equals(other));
 	}
 	
@@ -81,35 +82,33 @@ public class MethodSkeletonTest {
 	
 	@Test
 	public void testEquals_WrongArguments() {
-		other.setArguments(Arrays.asList(new VariableSkeleton(String.class, "rawr")));
+		other.setArguments(Arrays.<VariableSkeleton<?>>asList(new VariableSkeleton<String>(String.class, "rawr")));
 		assertFalse(method.equals(other));
 	}
 	
 	@Test
 	public void testCompareTo_StaticToNonStatic() {
-		method.isStatic = true;
-		other.isStatic = false;
+		method.setStatic(true);
+		other.setStatic(false);
 		assertEquals(1, method.compareTo(other));
 	}
 	
 	@Test
 	public void testCompareTo_NonStaticToStatic() {
-		method.isStatic = false;
-		other.isStatic = true;
+		method.setStatic(false);
+		other.setStatic(true);
 		assertEquals(-1, method.compareTo(other));
 	}
 	
 	@Test
 	public void testCompareTo_OverrideToNotOverride() {
-		method.setOverride(true);
-		other.setOverride(false);
+		method.addAnnotation(AnnotationSkeleton.OVERRIDE);
 		assertEquals(1, method.compareTo(other));
 	}
 	
 	@Test
 	public void testCompareTo_NotOverrideToOverride() {
-		method.setOverride(false);
-		other.setOverride(true);
+		other.addAnnotation(AnnotationSkeleton.OVERRIDE);
 		assertEquals(-1, method.compareTo(other));
 	}
 	
@@ -135,7 +134,7 @@ public class MethodSkeletonTest {
 	
 	@Test
 	public void testCompareTo_DifferentArgumentsSize() {
-		other.setArguments(Collections.<VariableSkeleton>emptyList());
+		other.setArguments(Collections.<VariableSkeleton<?>>emptyList());
 		assertEquals(-2, method.compareTo(other));
 	}
 

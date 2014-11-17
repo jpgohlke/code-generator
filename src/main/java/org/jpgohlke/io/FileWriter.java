@@ -1,19 +1,18 @@
-package org.jpgohlke.generation.code.io;
+package org.jpgohlke.io;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
-public class CodeWriter extends FileProcessor {
+public class FileWriter extends FileProcessor {
 	
-	public CodeWriter() { }
+	public FileWriter() { }
 	
-	public CodeWriter(String fileName) throws IOException {
+	public FileWriter(String fileName) throws IOException {
 		this(new File(fileName));
 	}
 	
-	public CodeWriter(File file) throws IOException {
+	public FileWriter(File file) throws IOException {
 		this.file = file;
 	}
 	
@@ -23,7 +22,7 @@ public class CodeWriter extends FileProcessor {
 	}
 	
 	public void write(String string) throws IOException {
-		try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+		try(BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(file))) {
 			for(String line : string.split("\n")) {
 				writer.write(line);
 				writer.newLine();

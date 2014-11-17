@@ -1,5 +1,6 @@
 package org.jpgohlke.generation.code.java.skeleton;
 
+import org.jpgohlke.generation.code.java.skeleton.SkeletonMember;
 import org.junit.Test;
 
 public class SkeletonMemberTest {

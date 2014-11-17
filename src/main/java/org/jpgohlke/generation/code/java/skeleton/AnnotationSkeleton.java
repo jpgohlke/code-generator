@@ -4,7 +4,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class AnnotationSkeleton implements Comparable<AnnotationSkeleton> {
+	
+	public static final AnnotationSkeleton OVERRIDE = new AnnotationSkeleton("Override");
 	
 	private String name;
 	private Map<String, String> fields;
@@ -28,10 +33,26 @@ public class AnnotationSkeleton implements Comparable<AnnotationSkeleton> {
 		return fields;
 	}
 	
-	public void setFields(Map<String, String> fields) {
-		this.fields = fields;
+	public void addField(String key, String value) {
+		fields.put(key, value);
 	}
 	
+	
+	@Override
+	public boolean equals(Object object) {
+		if(object == null) return false;
+		if(object == this) return true;
+		if(object.getClass() != getClass()) return false;
+		
+		AnnotationSkeleton other = (AnnotationSkeleton) object;
+		
+		return new EqualsBuilder().append(name, other.name).isEquals();
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(name).toHashCode();
+	}
 	
 	@Override
 	public String toString() {
@@ -46,7 +67,6 @@ public class AnnotationSkeleton implements Comparable<AnnotationSkeleton> {
 		}
 		return string;
 	}
-
 
 	@Override
 	public int compareTo(AnnotationSkeleton other) {

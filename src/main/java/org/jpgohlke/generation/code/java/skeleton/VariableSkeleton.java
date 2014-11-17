@@ -52,7 +52,7 @@ public class VariableSkeleton<T> extends SkeletonMember implements Comparable<Va
 	
 	@Override
 	public String toString() {
-		String string = type.getSimpleName() + " " + getName();
+		String string = getAccessModifier() + " " + type.getSimpleName() + " " + getName();
 		if(value != null) {
 			string += " = " + value;
 		}
