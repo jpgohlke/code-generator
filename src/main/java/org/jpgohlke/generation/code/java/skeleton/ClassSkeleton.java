@@ -14,6 +14,8 @@ import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public class ClassSkeleton extends SkeletonMember {
 	
+	//TODO: extends, implements
+	
 	private boolean isEnum;
 	
 	private PackageSkeleton packageDeclaration;
