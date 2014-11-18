@@ -1,6 +1,6 @@
 package org.jpgohlke.generation.code.java.skeleton;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +22,7 @@ public abstract class SkeletonMember {
 		}
 		this.name = name;
 		this.accessModifier = DEFAULT_ACCESS_MODIFIER;
-		this.annotations = new HashSet<AnnotationSkeleton>();
+		this.annotations = new LinkedHashSet<AnnotationSkeleton>();
 	}
 	
 	

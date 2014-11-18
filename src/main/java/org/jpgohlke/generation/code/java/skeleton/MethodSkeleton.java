@@ -4,16 +4,19 @@ import static org.jpgohlke.generation.code.format.CodeFormatter.indent;
 import static org.jpgohlke.generation.code.format.CodeFormatter.newLines;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.chop;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class MethodSkeleton extends SkeletonMember implements Comparable<MethodSkeleton> {
 	
-	private boolean isSynchronized; //TODO
+	private boolean isSynchronized;
+	private String returnType;
 	private List<VariableSkeleton<?>> arguments;
 	
 	
@@ -40,6 +43,22 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 		return isSynchronized;
 	}
 	
+	public String getReturnType() {
+		return returnType;
+	}
+	
+	public void setReturnType(String returnType) {
+		this.returnType = returnType;
+	}
+	
+	public void setReturnType(Class<?> returnType) {
+		this.returnType = returnType == null ? null : returnType.getSimpleName();
+	}
+	
+	public void setReturnType(ClassSkeleton returnType) {
+		this.returnType = returnType == null ? null : returnType.getName();
+	}
+	
 	
 	@Override
 	public boolean equals(Object object) {
@@ -49,15 +68,14 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 		
 		MethodSkeleton other = (MethodSkeleton) object;
 		
-		if(isStatic() != other.isStatic()) return false;
-		if(getName() != other.getName()) return false;
+		if(arguments == null) arguments = new ArrayList<>();
+		if(other.arguments == null) other.arguments = new ArrayList<>();
 		
-		if(arguments == null && other.arguments == null) return true;
-		if(arguments == null || other.arguments == null) return false;
-		
-		if(arguments.equals(other.arguments)) return true;
-		
-		return false;
+		return new EqualsBuilder()
+						.append(getName(), other.getName())
+						.append(isStatic(), other.isStatic())
+						.append(arguments, other.arguments)
+						.isEquals();
 	}
 	
 	@Override
@@ -69,17 +87,16 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 	public String toString() {
 		String signature = "";
 		if(isNotEmpty(getAnnotations())) {
-			signature = join(getAnnotations(), newLines(1));
+			signature += join(getAnnotations(), newLines(1));
+			signature += chop(signature);
 		}
-		signature = chop(signature);
-		
-		//TODO: access modifiers, etc.
+		String access = getAccessModifier().toString();
+		if(isNotBlank(access)) signature += access + " ";
+		if(isSynchronized) signature += "synchronized ";
+		if(isNotBlank(returnType)) signature += returnType + " ";
 		signature += getName() + "(";
-		if(isNotEmpty(arguments)) {
-			join(arguments.iterator(), ", ");
-			signature = signature.substring(0, signature.length() - 2);
-		}
-		signature += ") " + newLines(1);
+		if(isNotEmpty(arguments)) signature += join(arguments, ", ");;
+		signature += ") {" + newLines(1);
 		signature += indent(newLines(1));
 		signature += "}";
 		return signature;

@@ -13,13 +13,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public class ClassSkeleton extends SkeletonMember {
-	
-	//TODO: extends, implements
-	
+		
 	private boolean isEnum;
+	
+	private String extension;
+	private String implementation;
 	
 	private PackageSkeleton packageDeclaration;
 	private Set<ImportSkeleton> imports;
+	private Set<MethodSkeleton> constructors;
 	private Set<ClassSkeleton> innerClasses;
 	private Set<VariableSkeleton<?>> fields;
 	private Set<MethodSkeleton> methods;
@@ -29,6 +31,38 @@ public class ClassSkeleton extends SkeletonMember {
 		super(name);
 	}
 	
+	
+	public String getExtension() {
+		return extension;
+	}
+	
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+	
+	public void setExtension(Class<?> extension) {
+		this.extension = extension == null ? null : extension.getSimpleName();
+	}
+	
+	public void setExtension(ClassSkeleton extension) {
+		this.extension = extension == null ? null : extension.getName();
+	}
+	
+	public String getImplementation() {
+		return implementation;
+	}
+	
+	public void setImplementation(String implementation) {
+		this.implementation = implementation;
+	}
+	
+	public void setImplementation(Class<?> implementation) {
+		this.implementation = implementation == null ? null : implementation.getSimpleName();
+	}
+	
+	public void setImplementation(ClassSkeleton implementation) {
+		this.implementation = implementation == null ? null : implementation.getName();
+	}
 	
 	public void setPackage(PackageSkeleton packageDeclaration) {
 		this.packageDeclaration = packageDeclaration;
@@ -47,6 +81,66 @@ public class ClassSkeleton extends SkeletonMember {
 	}
 	
 	
+	public PackageSkeleton getPackageDeclaration() {
+		return packageDeclaration;
+	}
+
+
+	public void setPackageDeclaration(PackageSkeleton packageDeclaration) {
+		this.packageDeclaration = packageDeclaration;
+	}
+
+
+	public Set<ImportSkeleton> getImports() {
+		return imports;
+	}
+
+
+	public void setImports(Set<ImportSkeleton> imports) {
+		this.imports = imports;
+	}
+
+
+	public Set<MethodSkeleton> getConstructors() {
+		return constructors;
+	}
+
+
+	public void setConstructors(Set<MethodSkeleton> constructors) {
+		this.constructors = constructors;
+	}
+
+
+	public Set<ClassSkeleton> getInnerClasses() {
+		return innerClasses;
+	}
+
+
+	public void setInnerClasses(Set<ClassSkeleton> innerClasses) {
+		this.innerClasses = innerClasses;
+	}
+
+
+	public Set<VariableSkeleton<?>> getFields() {
+		return fields;
+	}
+
+
+	public void setFields(Set<VariableSkeleton<?>> fields) {
+		this.fields = fields;
+	}
+
+
+	public Set<MethodSkeleton> getMethods() {
+		return methods;
+	}
+
+
+	public void setMethods(Set<MethodSkeleton> methods) {
+		this.methods = methods;
+	}
+
+
 	@Override
 	public boolean equals(Object object) {
 		if(object == null) return false;
@@ -67,57 +161,79 @@ public class ClassSkeleton extends SkeletonMember {
 	@Override
 	public String toString() {
 		
-		//TODO: separate these String representations into other
-		//methods in order to isolate tests
-		
 		String string = "";
 		
-		// Package
-		if(packageDeclaration != null && isNotBlank(getName())) {
-			string += packageDeclaration;
-			string += newLines(2);
-		}
+		string += packageToString();
+		string += newLines(2);
 		
-		// Imports
-		if(isNotEmpty(imports)) {
-			string += join(imports, "\n");
-			string += newLines(2);
-		}
+		string += importsToString();
+		string += newLines(2);
 		
-		// Declaration
-		String declaration = "";
-		if(getAccessModifier() != AccessModifier.PACKAGE) {
-			declaration += getAccessModifier() + " ";
-		}
-		declaration += isStatic() ? "static " : "";
-		declaration += isEnum ? "enum" : "class";
-		declaration += getName();
-		string += declaration + " {";
+		string += declarationToString();
 		string += indent(newLines(2));
 		
-		// Inner Classes
-		if(isNotEmpty(innerClasses)) {
-			string += indent(join(innerClasses, newLines(2)));
-			string += indent(newLines(3));
-		}
+		string += indent(fieldsToString());
+		string += indent(newLines(3));
 		
-		// Fields
-		if(isNotEmpty(fields)) {
-			string += indent(join(fields, ";" + newLines(1)));
-			string += ";";
-			string += indent(newLines(2));
-		}
+		string += indent(constructorsToString());
+		string += indent(newLines(3));
 		
-		// Methods
-		if(isNotEmpty(methods)) {
-			string += indent(join(methods, newLines(2)));
-			string += indent(newLines(2));
-		}
+		string += indent(methodsToString());
+		string += indent(newLines(isNotBlank(innerClassesToString()) ? 3 : 2));
 		
-		// Closing
+		string += indent(innerClassesToString());
+		string += indent(newLines(2));		
+		
 		string += "}";
 		return string;
 	}
 	
+	
+	
+	
+	// Below are isolated for good JUnit tests
+	// The @Override toString() is too complex
+	
+	String packageToString() {
+		return packageDeclaration != null ? packageDeclaration.toString() : "";
+	}
+	
+	String importsToString() {
+		return isNotEmpty(imports) ? join(imports, newLines(1)) : "";
+	}
+	
+	String declarationToString() {
+		String string = "";
+		if(getAccessModifier() != AccessModifier.PACKAGE) {
+			string += getAccessModifier() + " ";
+		}
+		string += isStatic() ? "static " : "";
+		string += isEnum ? "enum" : "class";
+		string += getName();
+		if(isNotBlank(extension)) {
+			string += " " + extension;
+		}
+		if(isNotBlank(implementation)) {
+			string += " " + implementation;
+		}
+		string += " {";
+		return string;
+	}
+	
+	String constructorsToString() {
+		return isNotEmpty(constructors) ? join(constructors, newLines(2)) : "";
+	}
+	
+	String innerClassesToString() {
+		return isNotEmpty(innerClasses) ? join(innerClasses, newLines(2)) : "";
+	}
+	
+	String fieldsToString() {
+		return isNotEmpty(fields) ? join(fields, ";" + newLines(1)) + ";" : "";
+	}
+	
+	String methodsToString() {
+		return isNotEmpty(methods) ? join(methods, newLines(2)) : "";
+	}
 
 }
