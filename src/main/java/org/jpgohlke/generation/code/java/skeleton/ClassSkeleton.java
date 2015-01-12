@@ -13,6 +13,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public class ClassSkeleton extends SkeletonMember {
+	
+	private static final AccessModifier DEFAULT_ACCESS_MODIFIER = AccessModifier.PUBLIC;
 		
 	private boolean isEnum;
 	
@@ -28,7 +30,7 @@ public class ClassSkeleton extends SkeletonMember {
 	
 	
 	public ClassSkeleton(String name) {
-		super(name);
+		super(name, DEFAULT_ACCESS_MODIFIER);
 	}
 	
 	
@@ -172,17 +174,29 @@ public class ClassSkeleton extends SkeletonMember {
 		string += declarationToString();
 		string += indent(newLines(2));
 		
-		string += indent(fieldsToString());
-		string += indent(newLines(3));
+		String fields = fieldsToString();
+		if(isNotBlank(fields)) {
+			string += indent(fieldsToString());
+			string += indent(newLines(2));
+		}
 		
-		string += indent(constructorsToString());
-		string += indent(newLines(3));
+		String constructors = constructorsToString();
+		if(isNotBlank(constructors)) {
+			string += indent(constructors);
+			string += indent(newLines(3));
+		}
 		
-		string += indent(methodsToString());
-		string += indent(newLines(isNotBlank(innerClassesToString()) ? 3 : 2));
+		String methods = methodsToString();
+		if(isNotBlank(methods)) {
+			string += indent(methods);
+			string += indent(newLines(2));
+		}
 		
-		string += indent(innerClassesToString());
-		string += indent(newLines(2));		
+		String innerClasses = innerClassesToString();
+		if(isNotBlank(innerClasses)) {
+			string += indent(innerClasses);
+			string += indent(newLines(2));		
+		}
 		
 		string += "}";
 		return string;
@@ -209,7 +223,7 @@ public class ClassSkeleton extends SkeletonMember {
 		}
 		string += isStatic() ? "static " : "";
 		string += isEnum ? "enum" : "class";
-		string += getName();
+		string += " " + getName();
 		if(isNotBlank(extension)) {
 			string += " " + extension;
 		}

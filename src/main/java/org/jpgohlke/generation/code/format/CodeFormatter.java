@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class CodeFormatter {
 	
-	private static final String NEW_LINE_STRING = StringUtils.LF;
+	private static final String NEW_LINE_STRING = "\n";
 	private static final String INDENTATION_STRING = "\t";
 	
 	public static String newLines(int number) {
@@ -20,10 +20,13 @@ public class CodeFormatter {
 			return StringUtils.repeat(INDENTATION_STRING, level);
 		}
 		String result = "";
-		for(String line : string.split("\n")) {
+		for(String line : string.split("\n", -1)) {
 			result += StringUtils.repeat(INDENTATION_STRING, level) + line + "\n";
 		}
 		result = StringUtils.chomp(result);
+		while(StringUtils.endsWith(result, "\t")) {
+			result = StringUtils.removeEnd(result, "\t");
+		}
 		return result;
 	}
 

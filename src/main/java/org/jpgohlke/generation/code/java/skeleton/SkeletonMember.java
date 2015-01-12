@@ -7,21 +7,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public abstract class SkeletonMember {
-	
-	private static final AccessModifier DEFAULT_ACCESS_MODIFIER = AccessModifier.PACKAGE;
-	
+		
 	private String name;
 	private AccessModifier accessModifier;
 	private boolean isStatic;
 	private Set<AnnotationSkeleton> annotations;
 	
 	
-	public SkeletonMember(String name) {
+	public SkeletonMember(String name, AccessModifier accessModifier) {
 		if(StringUtils.isBlank(name)) {
 			throw new IllegalArgumentException("Each member of the skeleton must have a name.");
 		}
 		this.name = name;
-		this.accessModifier = DEFAULT_ACCESS_MODIFIER;
+		this.accessModifier = accessModifier;
 		this.annotations = new LinkedHashSet<AnnotationSkeleton>();
 	}
 	

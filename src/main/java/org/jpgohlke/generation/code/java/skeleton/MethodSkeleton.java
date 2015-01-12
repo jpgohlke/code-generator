@@ -12,8 +12,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public class MethodSkeleton extends SkeletonMember implements Comparable<MethodSkeleton> {
+	
+	private static final AccessModifier DEFAULT_ACCESS_MODIFIER = AccessModifier.PUBLIC;
 	
 	private boolean isSynchronized;
 	private String returnType;
@@ -21,7 +24,7 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 	
 	
 	public MethodSkeleton(String name) {
-		super(name);
+		super(name, DEFAULT_ACCESS_MODIFIER);
 		arguments = new ArrayList<VariableSkeleton<?>>();
 	}
 	

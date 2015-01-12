@@ -2,16 +2,17 @@ package org.jpgohlke.generation.code.java.skeleton;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 
 public class ImportSkeleton extends SkeletonMember implements Comparable<ImportSkeleton> {
 	
 	
 	public ImportSkeleton(String name) {
-		super(name);
+		super(name, AccessModifier.PACKAGE);
 	}
 	
 	public ImportSkeleton(Class<?> klass) {
-		super(klass == null ? "" : klass.getCanonicalName());
+		super(klass == null ? "" : klass.getCanonicalName(), AccessModifier.PACKAGE);
 	}
 	
 	
