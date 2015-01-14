@@ -3,12 +3,14 @@ package org.jpgohlke.generation.code.java.skeleton;
 import static org.jpgohlke.generation.code.format.CodeFormatter.indent;
 import static org.jpgohlke.generation.code.format.CodeFormatter.newLines;
 import static org.apache.commons.lang3.StringUtils.join;
-import static org.apache.commons.lang3.StringUtils.chop;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -17,25 +19,44 @@ import org.jpgohlke.generation.code.java.attribute.AccessModifier;
 public class MethodSkeleton extends SkeletonMember implements Comparable<MethodSkeleton> {
 	
 	private static final AccessModifier DEFAULT_ACCESS_MODIFIER = AccessModifier.PUBLIC;
+	private static final String DEFAULT_RETURN_TYPE = "void";
 	
 	private boolean isSynchronized;
 	private String returnType;
-	private List<VariableSkeleton<?>> arguments;
+	private List<VariableSkeleton> arguments = new ArrayList<VariableSkeleton>();
+	private Set<String> throwables = new TreeSet<String>();
+	private String body;
 	
 	
 	public MethodSkeleton(String name) {
-		super(name, DEFAULT_ACCESS_MODIFIER);
-		arguments = new ArrayList<VariableSkeleton<?>>();
+		this(DEFAULT_ACCESS_MODIFIER, name);
+	}
+	
+	public MethodSkeleton(AccessModifier accessModifier, String name) {
+		this(accessModifier, DEFAULT_RETURN_TYPE, name);
+	}
+	
+	public MethodSkeleton(AccessModifier accessModifier, String returnType, String name) {
+		super(name, accessModifier);
+		this.returnType = returnType;
+		arguments = new ArrayList<VariableSkeleton>();
 	}
 	
 	
 	
-	public void setArguments(List<VariableSkeleton<?>> arguments) {
+	public void setArguments(List<VariableSkeleton> arguments) {
 		this.arguments = arguments;
 	}
 	
-	public List<VariableSkeleton<?>> getArguments() {
+	public List<VariableSkeleton> getArguments() {
 		return arguments;
+	}
+	
+	public void addArgument(VariableSkeleton argument) {
+		if(arguments == null) {
+			arguments = new ArrayList<VariableSkeleton>();
+		}
+		arguments.add(argument);
 	}
 	
 	public void setSynchronized(boolean isSynchronized) {
@@ -60,6 +81,30 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 	
 	public void setReturnType(ClassSkeleton returnType) {
 		this.returnType = returnType == null ? null : returnType.getName();
+	}
+	
+	public void setBody(String body) {
+		this.body = body;
+	}
+	
+	public String getBody() {
+		return body;
+	}
+	
+	public Set<String> getThrowables() {
+		return throwables;
+	}
+	
+	public void setThrowables(Set<String> throwables) {
+		this.throwables = throwables;
+	}
+	
+	public void addThrowable(Class<? extends Throwable> throwable) {
+		addThrowable(throwable.getSimpleName());
+	}
+	
+	public void addThrowable(String throwable) {
+		throwables.add(throwable);
 	}
 	
 	
@@ -91,7 +136,7 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 		String signature = "";
 		if(isNotEmpty(getAnnotations())) {
 			signature += join(getAnnotations(), newLines(1));
-			signature += chop(signature);
+			signature += newLines(1);
 		}
 		String access = getAccessModifier().toString();
 		if(isNotBlank(access)) signature += access + " ";
@@ -99,9 +144,11 @@ public class MethodSkeleton extends SkeletonMember implements Comparable<MethodS
 		if(isNotBlank(returnType)) signature += returnType + " ";
 		signature += getName() + "(";
 		if(isNotEmpty(arguments)) signature += join(arguments, ", ");;
-		signature += ") {" + newLines(1);
-		signature += indent(newLines(1));
-		signature += "}";
+		signature += ") ";
+		if(isNotEmpty(throwables)) signature += "throws " + join(throwables, ", ");
+		signature += "{" + newLines(1);
+		signature += indent(isEmpty(body) ? newLines(1) : body);
+		signature += newLines(1) + "}";
 		return signature;
 	}
 

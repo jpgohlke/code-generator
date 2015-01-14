@@ -7,6 +7,7 @@ import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -22,11 +23,11 @@ public class ClassSkeleton extends SkeletonMember {
 	private String implementation;
 	
 	private PackageSkeleton packageDeclaration;
-	private Set<ImportSkeleton> imports;
-	private Set<MethodSkeleton> constructors;
-	private Set<ClassSkeleton> innerClasses;
-	private Set<VariableSkeleton<?>> fields;
-	private Set<MethodSkeleton> methods;
+	private Set<ImportSkeleton> imports = new TreeSet<ImportSkeleton>();
+	private Set<MethodSkeleton> constructors = new TreeSet<MethodSkeleton>();
+	private Set<ClassSkeleton> innerClasses = new TreeSet<ClassSkeleton>();
+	private Set<VariableSkeleton> fields = new TreeSet<VariableSkeleton>();
+	private Set<MethodSkeleton> methods = new TreeSet<MethodSkeleton>();
 	
 	
 	public ClassSkeleton(String name) {
@@ -81,16 +82,6 @@ public class ClassSkeleton extends SkeletonMember {
 	public boolean isEnum() {
 		return isEnum;
 	}
-	
-	
-	public PackageSkeleton getPackageDeclaration() {
-		return packageDeclaration;
-	}
-
-
-	public void setPackageDeclaration(PackageSkeleton packageDeclaration) {
-		this.packageDeclaration = packageDeclaration;
-	}
 
 
 	public Set<ImportSkeleton> getImports() {
@@ -100,6 +91,13 @@ public class ClassSkeleton extends SkeletonMember {
 
 	public void setImports(Set<ImportSkeleton> imports) {
 		this.imports = imports;
+	}
+	
+	public void addImport(ImportSkeleton importSkeleton) {
+		if(imports == null) {
+			imports = new TreeSet<ImportSkeleton>();
+		}
+		imports.add(importSkeleton);
 	}
 
 
@@ -123,13 +121,30 @@ public class ClassSkeleton extends SkeletonMember {
 	}
 
 
-	public Set<VariableSkeleton<?>> getFields() {
+	public Set<VariableSkeleton> getFields() {
 		return fields;
 	}
 
 
-	public void setFields(Set<VariableSkeleton<?>> fields) {
+	public void setFields(Set<VariableSkeleton> fields) {
 		this.fields = fields;
+	}
+	
+	public void addField(VariableSkeleton field) {
+		addField(field, false);
+	}
+	
+	public void addField(VariableSkeleton field, boolean addGetterAndSetter) {
+		if(fields == null) {
+			fields = new TreeSet<VariableSkeleton>();
+		}
+		if(field != null) {
+			fields.add(field);
+			if(addGetterAndSetter) {
+				methods.add(field.getGetter());
+				methods.add(field.getSetter());
+			}
+		}
 	}
 
 
@@ -140,6 +155,13 @@ public class ClassSkeleton extends SkeletonMember {
 
 	public void setMethods(Set<MethodSkeleton> methods) {
 		this.methods = methods;
+	}
+	
+	public void addMethod(MethodSkeleton method) {
+		if(methods == null) {
+			methods = new TreeSet<MethodSkeleton>();
+		}
+		methods.add(method);
 	}
 
 
@@ -168,15 +190,18 @@ public class ClassSkeleton extends SkeletonMember {
 		string += packageToString();
 		string += newLines(2);
 		
-		string += importsToString();
-		string += newLines(2);
+		String imports = importsToString();
+		if(isNotBlank(imports)) {
+			string += imports;
+			string += newLines(2);
+		}
 		
 		string += declarationToString();
 		string += indent(newLines(2));
 		
 		String fields = fieldsToString();
 		if(isNotBlank(fields)) {
-			string += indent(fieldsToString());
+			string += indent(fields);
 			string += indent(newLines(2));
 		}
 		
@@ -228,7 +253,7 @@ public class ClassSkeleton extends SkeletonMember {
 			string += " " + extension;
 		}
 		if(isNotBlank(implementation)) {
-			string += " " + implementation;
+			string += " implements " + implementation;
 		}
 		string += " {";
 		return string;

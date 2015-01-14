@@ -9,18 +9,18 @@ import org.junit.Test;
 
 public class VariableSkeletonTest {
 	
-	private VariableSkeleton<Integer> variable;
+	private VariableSkeleton variable;
 	
 	
 	@Before
 	public void setup() {
-		variable = new VariableSkeleton<Integer>(int.class, "asd");
+		variable = new VariableSkeleton(int.class, "asd");
 	}
 	
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testConstructor_NullClass() {
-		new VariableSkeleton<Integer>(null, "asd");
+		new VariableSkeleton(null, "asd");
 	}
 	
 	@Test
@@ -40,12 +40,12 @@ public class VariableSkeletonTest {
 	
 	@Test
 	public void testEquals_False() {
-		assertFalse(variable.equals(new VariableSkeleton<Integer>(int.class, "dsfd")));
+		assertFalse(variable.equals(new VariableSkeleton(int.class, "dsfd")));
 	}
 	
 	@Test
 	public void testEquals_True() {
-		assertTrue(variable.equals(new VariableSkeleton<Integer>(int.class, "asd")));
+		assertTrue(variable.equals(new VariableSkeleton(int.class, "asd")));
 	}
 	
 	@Test
@@ -68,12 +68,12 @@ public class VariableSkeletonTest {
 	
 	@Test
 	public void testCompareTo_SameName() {
-		assertEquals(0, variable.compareTo(new VariableSkeleton<Integer>(int.class, "asd")));
+		assertEquals(0, variable.compareTo(new VariableSkeleton(int.class, "asd")));
 	}
 	
 	@Test
 	public void testCompareTo_DifferentName() {
-		assertEquals(-10, variable.compareTo(new VariableSkeleton<Integer>(int.class, "kappa")));
+		assertEquals(-10, variable.compareTo(new VariableSkeleton(int.class, "kappa")));
 	}
 
 }

@@ -1,8 +1,5 @@
 package org.jpgohlke.generation.code.java.skeleton;
 
-import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.join;
 import static org.jpgohlke.generation.code.format.CodeFormatter.indent;
 import static org.jpgohlke.generation.code.format.CodeFormatter.newLines;
 import static org.junit.Assert.*;
@@ -11,7 +8,6 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -192,6 +188,7 @@ public class ClassSkeletonTest {
 	public void testConstructorsToString_OneConstructor() {
 		MethodSkeleton constructor = new MethodSkeleton("Sup");
 		constructor.setAccessModifier(AccessModifier.PUBLIC);
+		constructor.setReturnType("");
 		Set<MethodSkeleton> constructors = new LinkedHashSet<MethodSkeleton>();
 		constructors.add(constructor);
 		skeleton.setConstructors(constructors);
@@ -205,8 +202,10 @@ public class ClassSkeletonTest {
 	public void testConstructorsToString_MultipleSameConstructors() {
 		MethodSkeleton constructor = new MethodSkeleton("Sup");
 		constructor.setAccessModifier(AccessModifier.PUBLIC);
+		constructor.setReturnType("");
 		MethodSkeleton constructor2 = new MethodSkeleton("Sup");
 		constructor2.setAccessModifier(AccessModifier.PUBLIC);
+		constructor2.setReturnType("");
 		Set<MethodSkeleton> constructors = new LinkedHashSet<MethodSkeleton>();
 		constructors.add(constructor);
 		constructors.add(constructor2);
@@ -224,7 +223,7 @@ public class ClassSkeletonTest {
 		constructor.setAccessModifier(AccessModifier.PUBLIC);
 		MethodSkeleton constructor2 = new MethodSkeleton("Sup");
 		constructor2.setAccessModifier(AccessModifier.PUBLIC);
-		constructor2.setArguments(Arrays.<VariableSkeleton<?>>asList(new VariableSkeleton<String>(String.class, "kappa")));
+		constructor2.setArguments(Arrays.<VariableSkeleton>asList(new VariableSkeleton(String.class, "kappa")));
 		Set<MethodSkeleton> constructors = new LinkedHashSet<MethodSkeleton>();
 		constructors.add(constructor);
 		constructors.add(constructor2);

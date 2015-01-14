@@ -15,9 +15,9 @@ import org.junit.Test;
 public class MethodSkeletonTest {
 	
 	private static final String METHOD_NAME = "toString";
-	private static final List<VariableSkeleton<?>> ARGUMENTS = Arrays.<VariableSkeleton<?>>asList(
-			new VariableSkeleton<String>(String.class, "asdf"),
-			new VariableSkeleton<Integer>(Integer.class, "doom")
+	private static final List<VariableSkeleton> ARGUMENTS = Arrays.<VariableSkeleton>asList(
+			new VariableSkeleton(String.class, "asdf"),
+			new VariableSkeleton(Integer.class, "doom")
 		);
 	
 	private MethodSkeleton method;
@@ -82,7 +82,7 @@ public class MethodSkeletonTest {
 	
 	@Test
 	public void testEquals_WrongArguments() {
-		other.setArguments(Arrays.<VariableSkeleton<?>>asList(new VariableSkeleton<String>(String.class, "rawr")));
+		other.setArguments(Arrays.<VariableSkeleton>asList(new VariableSkeleton(String.class, "rawr")));
 		assertFalse(method.equals(other));
 	}
 	
@@ -134,7 +134,7 @@ public class MethodSkeletonTest {
 	
 	@Test
 	public void testCompareTo_DifferentArgumentsSize() {
-		other.setArguments(Collections.<VariableSkeleton<?>>emptyList());
+		other.setArguments(Collections.<VariableSkeleton>emptyList());
 		assertEquals(-2, method.compareTo(other));
 	}
 
